@@ -7,11 +7,9 @@ import { Card } from "@/components/ui/Card";
 import { PipelineDrilldown } from "@/components/views/PipelineDrilldown";
 import { supabase } from "@/lib/supabase";
 import {
-    BarChart3,
     TrendingUp,
     AlertTriangle,
     Filter,
-    ArrowRight,
     DollarSign,
     Layers
 } from "lucide-react";
@@ -27,6 +25,7 @@ const initialHeatmapData = [
 
 export function PipelineView() {
     const [heatmapData, setHeatmapData] = useState<any[]>(initialHeatmapData);
+    const [allDeals, setAllDeals] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [selectedCell, setSelectedCell] = useState<{ stage: string, ageRange: string } | null>(null);
 
@@ -39,6 +38,7 @@ export function PipelineView() {
                 .select('*');
 
             if (deals && deals.length > 0) {
+                setAllDeals(deals);
                 // Aggregate deals into heatmap buckets
                 const stages = ["Discovery", "Proposal", "Negotiation", "Closing"];
                 const newHeatmap = stages.map(stage => {
@@ -70,6 +70,31 @@ export function PipelineView() {
         if (count > 0) {
             setSelectedCell({ stage, ageRange });
         }
+    };
+
+    const getFilteredDeals = () => {
+        if (!selectedCell) return [];
+        const now = new Date();
+        const getAge = (d: any) => Math.floor((now.getTime() - new Date(d.created_at).getTime()) / (1000 * 60 * 60 * 24));
+
+        return allDeals.filter(d => {
+            if (d.stage !== selectedCell.stage) return false;
+            const age = getAge(d);
+            if (selectedCell.ageRange === "0-3 Days") return age <= 3;
+            if (selectedCell.ageRange === "4-7 Days") return age > 3 && age <= 7;
+            if (selectedCell.ageRange === "8-14 Days") return age > 7 && age <= 14;
+            if (selectedCell.ageRange === "15+ Days") return age > 14;
+            return false;
+        }).map(d => ({
+            id: d.id,
+            name: d.name,
+            company: "Unknown Company", // Need join or separate fetch
+            value: `$${d.value}`,
+            owner: "Me", // Placeholder
+            timeInStage: "3 days", // Placeholder
+            decayRisk: "low", // Placeholder
+            probability: 50 // Placeholder
+        }));
     };
 
     const sidebar = (
@@ -219,4 +244,3 @@ export function PipelineView() {
         </AppLayout>
     );
 }
-```
