@@ -254,7 +254,7 @@ export function ConvertView() {
                                                 <ShieldAlert className="w-4 h-4 text-red-600 mt-0.5" />
                                                 <div>
                                                     <p className="text-sm font-medium text-red-900 dark:text-red-100">Missing Mandatory Field</p>
-                                                    <p className="text-xs text-red-700 dark:text-red-300 mt-1">Field 'Industry' is required for routing.</p>
+                                                    <p className="text-xs text-red-700 dark:text-red-300 mt-1">Field {"'Industry'"} is required for routing.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -264,7 +264,7 @@ export function ConvertView() {
                                                     <AlertTriangle className="w-4 h-4 text-orange-600 mt-0.5" />
                                                     <div>
                                                         <p className="text-sm font-medium text-orange-900 dark:text-orange-100">Low Confidence Match</p>
-                                                        <p className="text-xs text-orange-700 dark:text-orange-300 mt-1">Possible duplicate of 'Johnathan Doe'.</p>
+                                                        <p className="text-xs text-orange-700 dark:text-orange-300 mt-1">Possible duplicate of {"'Johnathan Doe'."}.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -282,8 +282,8 @@ export function ConvertView() {
                                         <div className="flex-1">
                                             <p className="text-sm font-medium text-blue-900 dark:text-blue-100">Enrich & Standardize</p>
                                             <ul className="mt-2 space-y-1 text-xs text-blue-800 dark:text-blue-200 list-disc list-inside">
-                                                <li>Infer Industry: "Technology"</li>
-                                                <li>Normalize Phone: "+1 (555) 123-4567"</li>
+                                                <li>Infer Industry: {"Technology"}</li>
+                                                <li>Normalize Phone: {'+1 (555) 123-4567'}</li>
                                             </ul>
                                             <Button
                                                 size="sm"

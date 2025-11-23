@@ -41,7 +41,7 @@ export default function CanvasPage() {
                     <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-100 dark:border-purple-800">
                         <h4 className="text-sm font-medium text-purple-900 dark:text-purple-100 mb-2">Canvas Insights</h4>
                         <p className="text-xs text-purple-700 dark:text-purple-300 leading-relaxed">
-                            Based on your whiteboard, I recommend focusing on the "Negotiation" stage drift. 3 deals are at risk.
+                            Based on your whiteboard, I recommend focusing on the {"Negotiation"} stage drift. 3 deals are at risk.
                         </p>
                     </div>
 
