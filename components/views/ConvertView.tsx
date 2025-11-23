@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+import { supabase } from "@/lib/supabase";
 import {
     ShieldAlert,
     CheckCircle2,
@@ -18,7 +19,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Mock Data for Convert Hub
+// Mock Data for Convert Hub (Fallback)
 const initialItems = [
     { id: 1, source: "Webform", submitted: "2 min ago", status: "quarantined", issues: 2, confidence: 45, owner: "System", data: { name: "John Doe", email: "john@gmail.com", company: "Unknown" } },
     { id: 2, source: "HubSpot", submitted: "15 min ago", status: "warning", issues: 1, confidence: 88, owner: "System", data: { name: "Jane Smith", email: "jane@acme.com", company: "Acme Corp" } },
@@ -29,15 +30,44 @@ const initialItems = [
 export function ConvertView() {
     const [activeQueue, setActiveQueue] = useState("quarantine"); // quarantine, warning, rejected, approved
     const [selectedItem, setSelectedItem] = useState<any>(null);
-    const [items, setItems] = useState(initialItems);
+    const [items, setItems] = useState<any[]>(initialItems);
+    const [loading, setLoading] = useState(false);
 
-    const filteredItems = items.filter(item => {
-        if (activeQueue === "quarantine") return item.status === "quarantined";
-        if (activeQueue === "warning") return item.status === "warning";
-        if (activeQueue === "rejected") return item.status === "rejected";
-        if (activeQueue === "approved") return item.status === "approved";
-        return true;
-    });
+    // Fetch from Supabase 'inbound_leads_raw'
+    useEffect(() => {
+        const fetchLeads = async () => {
+            setLoading(true);
+            // Map 'quarantine' queue to 'received' or specific status in DB
+            let statusFilter = 'received';
+            if (activeQueue === 'approved') statusFilter = 'processed';
+            if (activeQueue === 'rejected') statusFilter = 'rejected';
+
+            const { data, error } = await supabase
+                .from('inbound_leads_raw')
+                .select('*')
+                .eq('status', statusFilter)
+                .order('received_at', { ascending: false });
+
+            if (data && data.length > 0) {
+                const mappedItems = data.map((lead: any) => ({
+                    id: lead.id,
+                    source: lead.source || "Unknown",
+                    submitted: new Date(lead.received_at).toLocaleTimeString(),
+                    status: activeQueue === 'quarantine' ? 'quarantined' : activeQueue, // Map DB status to UI status
+                    issues: 0, // Need validation logic to populate this
+                    confidence: 0, // Need validation logic
+                    owner: "System",
+                    data: lead.payload
+                }));
+                setItems(mappedItems);
+            }
+            setLoading(false);
+        };
+
+        fetchLeads();
+    }, [activeQueue]);
+
+    const filteredItems = items; // Already filtered by query
 
     const handleAutoFix = (id: number) => {
         // Mock auto-fix logic
@@ -139,7 +169,9 @@ export function ConvertView() {
                         </div>
 
                         <div className="divide-y divide-border overflow-y-auto">
-                            {filteredItems.map((item) => (
+                            {loading && items.length === 0 ? (
+                                <div className="p-6 text-center text-muted-foreground">Loading leads...</div>
+                            ) : filteredItems.map((item) => (
                                 <div
                                     key={item.id}
                                     className={cn(

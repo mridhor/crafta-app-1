@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { UndoToast } from "@/components/ui/UndoToast";
+import { supabase } from "@/lib/supabase";
 import {
     Filter,
     MoreHorizontal,
@@ -22,8 +23,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Mock Data for Rhythm Stack
-const initialTasks = [
+// Mock Data for Rhythm Stack (Fallback)
+const mockTasks = [
     {
         id: 1,
         title: "Review Q3 Proposal with Acme Corp",
@@ -31,7 +32,7 @@ const initialTasks = [
         contact: "Alice Johnson",
         value: "$125,000",
         stage: "Proposal",
-        urgency: "high", // high, medium, low
+        urgency: "high",
         decay: "2 days left",
         aiContext: "Alice opened the proposal 3 times yesterday. Competitor 'TechGiant' mentioned in email.",
         suggestedAction: "Call to address pricing concerns",
@@ -84,30 +85,74 @@ const initialTasks = [
 
 export function RhythmStackView() {
     const [activeView, setActiveView] = useState("today"); // today, urgent, my-items, team-items
-    const [tasks, setTasks] = useState(initialTasks);
+    const [tasks, setTasks] = useState<any[]>(mockTasks);
+    const [loading, setLoading] = useState(false);
     const [showUndo, setShowUndo] = useState(false);
     const [lastDeletedTask, setLastDeletedTask] = useState<any>(null);
+
+    // Fetch tasks from Supabase 'actions' table
+    useEffect(() => {
+        const fetchTasks = async () => {
+            setLoading(true);
+            // In Phase 1 Schema, 'actions' table holds the tasks
+            const { data, error } = await supabase
+                .from('actions')
+                .select(`
+          *,
+          deal:deals(name, value, stage, company:companies(name))
+        `)
+                .eq('status', 'pending');
+
+            if (data && data.length > 0) {
+                // Transform Supabase data to UI model
+                const mappedTasks = data.map((action: any) => ({
+                    id: action.id,
+                    title: action.action_type || "Untitled Action",
+                    entity: action.deal?.company?.name || "Unknown Entity",
+                    contact: "Unknown Contact", // Would need join with contacts
+                    value: action.deal?.value ? `$${action.deal.value}` : "-",
+                    stage: action.deal?.stage || "-",
+                    urgency: action.params?.urgency || "medium",
+                    decay: "Just now", // Placeholder logic
+                    aiContext: action.params?.ai_context || "No AI context available.",
+                    suggestedAction: action.action_type,
+                    type: action.action_type?.toLowerCase().includes('call') ? 'call' : 'email',
+                    owner: "me" // Placeholder
+                }));
+                setTasks(mappedTasks);
+            }
+            setLoading(false);
+        };
+
+        fetchTasks();
+    }, [activeView]);
 
     // Filter Logic
     const filteredTasks = tasks.filter(task => {
         if (activeView === "urgent") return task.urgency === "high" || task.urgency === "critical";
         if (activeView === "my-items") return task.owner === "me";
         if (activeView === "team-items") return task.owner === "team";
-        return true; // "today" shows all for now (mock)
+        return true; // "today" shows all for now
     });
 
-    const handleDone = (taskId: number) => {
+    const handleDone = async (taskId: number) => {
         const taskToDelete = tasks.find(t => t.id === taskId);
         setLastDeletedTask(taskToDelete);
         setTasks(tasks.filter(t => t.id !== taskId));
         setShowUndo(true);
+
+        // Optimistic update
+        // await supabase.from('actions').update({ status: 'completed' }).eq('id', taskId);
     };
 
-    const handleUndo = () => {
+    const handleUndo = async () => {
         if (lastDeletedTask) {
             setTasks(prev => [...prev, lastDeletedTask].sort((a, b) => a.id - b.id));
             setShowUndo(false);
             setLastDeletedTask(null);
+
+            // Revert in Supabase
+            // await supabase.from('actions').update({ status: 'pending' }).eq('id', lastDeletedTask.id);
         }
     };
 
@@ -218,7 +263,9 @@ export function RhythmStackView() {
                 </div>
 
                 <div className="space-y-4">
-                    {filteredTasks.map((task) => (
+                    {loading && tasks.length === 0 ? (
+                        <div className="text-center py-12 text-muted-foreground">Loading tasks...</div>
+                    ) : filteredTasks.map((task) => (
                         <Card key={task.id} className="p-0 overflow-hidden hover:shadow-md transition-shadow border-l-4 border-l-transparent hover:border-l-blue-500 group">
                             <div className="p-5 flex gap-4">
                                 {/* Urgency Indicator */}
@@ -298,7 +345,7 @@ export function RhythmStackView() {
                         </Card>
                     ))}
 
-                    {filteredTasks.length === 0 && (
+                    {filteredTasks.length === 0 && !loading && (
                         <div className="text-center py-12">
                             <div className="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                                 <CheckCircle2 className="w-6 h-6" />
