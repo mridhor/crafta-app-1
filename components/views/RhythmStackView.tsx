@@ -168,7 +168,7 @@ export function RhythmStackView() {
                         onClick={() => setActiveView("today")}
                     >
                         <CalendarIcon className="w-4 h-4 mr-3 text-blue-500" />
-                        Today's Focus
+                        Today{"'"} Focus
                     </Button>
                     <Button
                         variant="ghost"
@@ -238,7 +238,7 @@ export function RhythmStackView() {
                     <h4 className="text-xs font-bold text-muted-foreground uppercase">Pattern Detection</h4>
                     <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-md border border-blue-100 dark:border-blue-900">
                         <p className="text-xs text-blue-800 dark:text-blue-200">
-                            <strong>Deal Velocity Alert:</strong> Deals in "Proposal" stage are stalling 20% longer than last month. Consider scheduling follow-ups earlier.
+                            <strong>Deal Velocity Alert:</strong> Deals in {"Proposal"} stage are stalling 20% longer than last month. Consider scheduling follow-ups earlier.
                         </p>
                     </div>
                 </div>
@@ -352,7 +352,7 @@ export function RhythmStackView() {
                             </div>
                             <h3 className="text-lg font-medium">All caught up!</h3>
                             <p className="text-muted-foreground max-w-xs mx-auto mt-2">
-                                You've cleared your {activeView.replace("-", " ")} list. Great work!
+                                You{"'ve"} cleared your {activeView.replace("-", " ")} list. Great work!
                             </p>
                             <Button variant="outline" className="mt-6" onClick={() => setActiveView("today")}>
                                 View All Tasks

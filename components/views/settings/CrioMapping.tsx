@@ -73,7 +73,7 @@ export function CrioMapping() {
                         <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md border border-blue-100 dark:border-blue-900">
                             <div className="mt-0.5 text-blue-600"><Database className="w-4 h-4" /></div>
                             <div>
-                                <p className="text-sm font-medium text-blue-900 dark:text-blue-100">Map "contact_phone" to "contact.phone"</p>
+                                <p className="text-sm font-medium text-blue-900 dark:text-blue-100">Map {"\"contact_phone\" to \"contact.phone\""}</p>
                                 <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">Confidence: 98% based on data patterns.</p>
                                 <div className="flex gap-2 mt-2">
                                     <Button size="sm" className="h-6 text-xs bg-blue-600 text-white hover:bg-blue-700">Accept</Button>
