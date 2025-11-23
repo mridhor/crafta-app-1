@@ -7,9 +7,11 @@ import { Card } from "@/components/ui/Card";
 import { PipelineDrilldown } from "@/components/views/PipelineDrilldown";
 import { supabase } from "@/lib/supabase";
 import {
+    BarChart3,
     TrendingUp,
     AlertTriangle,
     Filter,
+    ArrowRight,
     DollarSign,
     Layers
 } from "lucide-react";
@@ -92,7 +94,7 @@ export function PipelineView() {
             value: `$${d.value}`,
             owner: "Me", // Placeholder
             timeInStage: "3 days", // Placeholder
-            decayRisk: "low", // Placeholder
+            decayRisk: "low" as const, // Placeholder
             probability: 50 // Placeholder
         }));
     };
@@ -237,7 +239,7 @@ export function PipelineView() {
                 <PipelineDrilldown
                     stage={selectedCell.stage}
                     timeframe={selectedCell.ageRange}
-                    deals={getFilteredDeals() as any}
+                    deals={getFilteredDeals()}
                     onClose={() => setSelectedCell(null)}
                 />
             )}
