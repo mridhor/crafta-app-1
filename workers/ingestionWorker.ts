@@ -1,5 +1,5 @@
 import { Worker, Job } from 'bullmq';
-import { supabase } from '@/lib/supabase';
+import { supabase, Tables, Inserts } from '@/lib/supabase';
 
 // This would typically run in a separate Node.js process
 const connection = {
@@ -25,9 +25,10 @@ export const ingestionWorker = new Worker('ingestion-queue', async (job: Job<Ing
         if (error || !lead) throw new Error(`Lead not found: ${error?.message}`);
 
         // 2. Normalize & Map (Mock Logic)
+        const payload = lead.payload as Record<string, any>;
         const normalizedEntity = {
-            name: lead.payload.name || lead.payload.company,
-            email: lead.payload.email,
+            name: payload.name || payload.company || 'Unknown',
+            email: payload.email || '',
             // ... apply schema_mappings here
         };
 
@@ -36,25 +37,31 @@ export const ingestionWorker = new Worker('ingestion-queue', async (job: Job<Ing
         // if (validationResult.action === 'quarantine') { ... }
 
         // 4. Write to Canonical Entities (if approved)
-        if (lead.payload.type === 'contact') {
-            await supabase.from('contacts').insert({
+        if (payload.type === 'contact') {
+            const contactInsert: Inserts<'contacts'> = {
                 workspace_id: lead.workspace_id,
                 email: normalizedEntity.email,
                 name: normalizedEntity.name,
                 metadata: lead.payload
-            });
+            };
+            await supabase.from('contacts').insert(contactInsert);
         } else {
-            await supabase.from('companies').insert({
+            const companyInsert: Inserts<'companies'> = {
                 workspace_id: lead.workspace_id,
                 name: normalizedEntity.name,
                 metadata: lead.payload
-            });
+            };
+            await supabase.from('companies').insert(companyInsert);
         }
 
         // 5. Update Status
+        const leadUpdate: Partial<Inserts<'inbound_leads_raw'>> = {
+            status: 'processed',
+            processed_at: new Date().toISOString()
+        };
         await supabase
             .from('inbound_leads_raw')
-            .update({ status: 'processed', processed_at: new Date().toISOString() })
+            .update(leadUpdate)
             .eq('id', lead.id);
 
         console.log(`Lead ${lead.id} processed successfully`);
