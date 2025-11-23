@@ -52,7 +52,7 @@ export function AuditLog() {
                             </td>
                             <td className="px-4 py-3"><span className="px-2 py-0.5 bg-orange-100 text-orange-700 rounded text-xs font-bold">Quarantine</span></td>
                             <td className="px-4 py-3 text-blue-600">Lead: Acme Corp</td>
-                            <td className="px-4 py-3 text-muted-foreground truncate max-w-xs">Missing required field: {"'Industry'"}</td>
+                            <td className="px-4 py-3 text-muted-foreground truncate max-w-xs">Missing required field: 'Industry'</td>
                         </tr>
                         <tr>
                             <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">Oct 24, 10:30 AM</td>
