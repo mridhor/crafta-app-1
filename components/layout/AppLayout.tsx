@@ -7,9 +7,10 @@ import { cn } from "@/lib/utils";
 interface AppLayoutProps {
     children: React.ReactNode;
     leftSidebar?: React.ReactNode;
+    rightPanel?: React.ReactNode;
 }
 
-export function AppLayout({ children, leftSidebar }: AppLayoutProps) {
+export function AppLayout({ children, leftSidebar, rightPanel }: AppLayoutProps) {
     return (
         <div className="min-h-screen bg-background flex flex-col">
             <TopBar />
@@ -30,7 +31,7 @@ export function AppLayout({ children, leftSidebar }: AppLayoutProps) {
                 </main>
 
                 {/* Right Panel (AI Context) */}
-                <RightPanel />
+                {rightPanel || <RightPanel />}
             </div>
         </div>
     );

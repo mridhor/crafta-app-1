@@ -1,114 +1,191 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { MessageSquare, Send, MoreHorizontal, Pin, Clock, Plus, Layout, Type, Image as ImageIcon } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import {
+    Network,
+    ZoomIn,
+    ZoomOut,
+    Move,
+    Layers,
+    Share2,
+    MoreHorizontal,
+    Sparkles
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+// Mock Data for Revenue Graph (Fallback)
+const initialNodes = [
+    { id: 1, label: "Acme Corp", type: "company", x: 400, y: 300 },
+    { id: 2, label: "Alice Johnson", type: "contact", x: 250, y: 200 },
+    { id: 3, label: "Deal: Q3 Expansion", type: "deal", x: 550, y: 200 },
+    { id: 4, label: "Bob Smith", type: "contact", x: 250, y: 400 },
+    { id: 5, label: "Email: Pricing", type: "action", x: 100, y: 150 },
+];
+
+const initialEdges = [
+    { from: 2, to: 1, label: "Works at" },
+    { from: 4, to: 1, label: "Works at" },
+    { from: 3, to: 1, label: "Opportunity for" },
+    { from: 5, to: 2, label: "Sent to" },
+];
 
 export function CanvasView() {
+    const [nodes, setNodes] = useState<any[]>(initialNodes);
+    const [edges, setEdges] = useState<any[]>(initialEdges);
+    const [loading, setLoading] = useState(false);
+
+    // Fetch graph data from Supabase
+    useEffect(() => {
+        const fetchGraph = async () => {
+            setLoading(true);
+            // In Phase 1, we might not have full graph data populated yet, so we'll try to fetch or fallback
+            const { data: graphNodes, error: nodeError } = await supabase.from('revenue_graph_nodes').select('*');
+            const { data: graphEdges, error: edgeError } = await supabase.from('revenue_graph_edges').select('*');
+
+            if (graphNodes && graphNodes.length > 0) {
+                setNodes(graphNodes.map((n: any) => ({
+                    id: n.id,
+                    label: n.properties?.name || "Unknown Node",
+                    type: n.type,
+                    x: Math.random() * 800, // Random position for now
+                    y: Math.random() * 600
+                })));
+            }
+
+            if (graphEdges && graphEdges.length > 0) {
+                setEdges(graphEdges.map((e: any) => ({
+                    from: e.from_node_id,
+                    to: e.to_node_id,
+                    label: e.type
+                })));
+            }
+            setLoading(false);
+        };
+
+        fetchGraph();
+    }, []);
+
     const sidebar = (
         <div className="p-4 space-y-6">
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white mb-4">
-                <Plus className="w-4 h-4 mr-2" /> New Session
-            </Button>
-
             <div>
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Pins</h3>
-                <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm text-foreground p-2 hover:bg-muted rounded cursor-pointer">
-                        <Pin className="w-3 h-3 text-orange-500" /> Q4 Strategy
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Graph Layers</h3>
+                <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2">
+                        <input type="checkbox" defaultChecked className="rounded border-gray-300" />
+                        <span>Companies</span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-foreground p-2 hover:bg-muted rounded cursor-pointer">
-                        <Pin className="w-3 h-3 text-orange-500" /> Competitor Analysis
+                    <div className="flex items-center gap-2">
+                        <input type="checkbox" defaultChecked className="rounded border-gray-300" />
+                        <span>Contacts</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <input type="checkbox" defaultChecked className="rounded border-gray-300" />
+                        <span>Deals</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <input type="checkbox" className="rounded border-gray-300" />
+                        <span>Emails & Calls</span>
                     </div>
                 </div>
             </div>
 
             <div>
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Recent Chats</h3>
-                <div className="space-y-1">
-                    <div className="p-2 hover:bg-muted rounded-md cursor-pointer group">
-                        <div className="text-sm font-medium truncate">Why are demos stalling?</div>
-                        <div className="text-xs text-muted-foreground truncate flex items-center gap-1">
-                            <Clock className="w-3 h-3" /> 2h ago
-                        </div>
-                    </div>
-                    <div className="p-2 hover:bg-muted rounded-md cursor-pointer">
-                        <div className="text-sm font-medium truncate">Draft follow-up for Acme</div>
-                        <div className="text-xs text-muted-foreground truncate flex items-center gap-1">
-                            <Clock className="w-3 h-3" /> 1d ago
-                        </div>
-                    </div>
-                    <div className="p-2 hover:bg-muted rounded-md cursor-pointer">
-                        <div className="text-sm font-medium truncate">QBR Preparation</div>
-                        <div className="text-xs text-muted-foreground truncate flex items-center gap-1">
-                            <Clock className="w-3 h-3" /> 3d ago
-                        </div>
-                    </div>
-                </div>
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Analysis</h3>
+                <Button variant="outline" className="w-full justify-start text-sm mb-2">
+                    <Sparkles className="w-4 h-4 mr-2 text-blue-500" />
+                    Find Buying Centers
+                </Button>
+                <Button variant="outline" className="w-full justify-start text-sm">
+                    <Network className="w-4 h-4 mr-2 text-purple-500" />
+                    Map Influence Paths
+                </Button>
             </div>
         </div>
     );
 
     return (
         <AppLayout leftSidebar={sidebar}>
-            <div className="flex flex-col h-full relative bg-slate-50 dark:bg-slate-950/50">
-                {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-border bg-background">
-                    <div className="flex items-center gap-2">
-                        <h1 className="font-bold text-lg">Untitled Session</h1>
-                        <span className="text-xs text-muted-foreground">Edited just now</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm"><Layout className="w-4 h-4 mr-2" /> Templates</Button>
-                        <Button variant="ghost" size="icon"><MoreHorizontal className="w-4 h-4" /></Button>
-                    </div>
+            <div className="h-full flex flex-col relative bg-slate-50 dark:bg-slate-950 overflow-hidden">
+                {/* Toolbar */}
+                <div className="absolute top-4 left-4 z-10 flex gap-2 bg-background/80 backdrop-blur border border-border p-1.5 rounded-md shadow-sm">
+                    <Button variant="ghost" size="icon" className="h-8 w-8"><ZoomIn className="w-4 h-4" /></Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8"><ZoomOut className="w-4 h-4" /></Button>
+                    <div className="w-px h-4 bg-border my-auto" />
+                    <Button variant="ghost" size="icon" className="h-8 w-8"><Move className="w-4 h-4" /></Button>
+                    <Button variant="ghost" size="icon" className="h-8 w-8"><Layers className="w-4 h-4" /></Button>
                 </div>
 
-                {/* Canvas Area */}
-                <div className="flex-1 overflow-hidden relative p-8">
-                    {/* Placeholder for Dynamic Elements */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center max-w-2xl w-full">
-                        <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mb-6 text-blue-600 mx-auto">
-                            <MessageSquare className="w-8 h-8" />
+                <div className="absolute top-4 right-4 z-10">
+                    <Button variant="outline" size="sm" className="bg-background/80 backdrop-blur">
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Export Graph
+                    </Button>
+                </div>
+
+                {/* Canvas Area (Mock Visualization) */}
+                <div className="flex-1 relative">
+                    <svg className="w-full h-full pointer-events-none absolute top-0 left-0">
+                        {edges.map((edge, i) => {
+                            const fromNode = nodes.find(n => n.id === edge.from) || { x: 0, y: 0 };
+                            const toNode = nodes.find(n => n.id === edge.to) || { x: 0, y: 0 };
+                            return (
+                                <line
+                                    key={i}
+                                    x1={fromNode.x}
+                                    y1={fromNode.y}
+                                    x2={toNode.x}
+                                    y2={toNode.y}
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    className="text-border"
+                                />
+                            );
+                        })}
+                    </svg>
+
+                    {nodes.map((node) => (
+                        <div
+                            key={node.id}
+                            className={cn(
+                                "absolute transform -translate-x-1/2 -translate-y-1/2 p-3 rounded-lg border shadow-sm cursor-pointer hover:shadow-md transition-all bg-background flex items-center gap-2 min-w-[150px]",
+                                node.type === 'company' ? "border-blue-200 dark:border-blue-800" :
+                                    node.type === 'contact' ? "border-purple-200 dark:border-purple-800" :
+                                        node.type === 'deal' ? "border-green-200 dark:border-green-800" :
+                                            "border-gray-200 dark:border-gray-800"
+                            )}
+                            style={{ left: node.x, top: node.y }}
+                        >
+                            <div className={cn(
+                                "w-8 h-8 rounded flex items-center justify-center text-white",
+                                node.type === 'company' ? "bg-blue-500" :
+                                    node.type === 'contact' ? "bg-purple-500" :
+                                        node.type === 'deal' ? "bg-green-500" :
+                                            "bg-gray-500"
+                            )}>
+                                {node.type === 'company' && <Network className="w-4 h-4" />}
+                                {node.type === 'contact' && <span className="text-xs font-bold">C</span>}
+                                {node.type === 'deal' && <span className="text-xs font-bold">$</span>}
+                                {node.type === 'action' && <span className="text-xs font-bold">A</span>}
+                            </div>
+                            <div className="flex-1">
+                                <div className="text-xs font-bold truncate">{node.label}</div>
+                                <div className="text-[10px] text-muted-foreground uppercase">{node.type}</div>
+                            </div>
                         </div>
-                        <h2 className="text-2xl font-bold mb-2">Intelligence Canvas</h2>
-                        <p className="text-muted-foreground mb-8">
-                            Ask questions, drag entities, or start a strategy session.
-                        </p>
+                    ))}
 
-                        {/* Input Area */}
-                        <div className="w-full relative shadow-lg rounded-full">
-                            <input
-                                type="text"
-                                placeholder="Ask anything..."
-                                className="w-full h-14 pl-6 pr-14 rounded-full border border-border shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-background"
-                            />
-                            <Button size="icon" className="absolute right-2 top-2 rounded-full bg-blue-600 hover:bg-blue-700 w-10 h-10">
-                                <Send className="w-4 h-4 text-white" />
-                            </Button>
+                    {loading && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-20">
+                            <div className="flex flex-col items-center gap-2">
+                                <Sparkles className="w-8 h-8 text-blue-500 animate-pulse" />
+                                <p className="text-sm font-medium text-muted-foreground">Loading Intelligence Graph...</p>
+                            </div>
                         </div>
-
-                        {/* Suggestions */}
-                        <div className="flex flex-wrap justify-center gap-2 mt-6">
-                            <Button variant="outline" className="rounded-full text-xs h-8 bg-background">Analyze Q4 Pipeline</Button>
-                            <Button variant="outline" className="rounded-full text-xs h-8 bg-background">Why is deal X stalled?</Button>
-                            <Button variant="outline" className="rounded-full text-xs h-8 bg-background">Draft email to John</Button>
-                        </div>
-                    </div>
-
-                    {/* Draggable Element Mockups */}
-                    <Card className="absolute top-20 left-20 w-64 p-4 shadow-md cursor-move border-l-4 border-l-blue-500 bg-background rotate-1">
-                        <h4 className="font-bold text-sm mb-2">Pipeline Analysis</h4>
-                        <p className="text-xs text-muted-foreground">
-                            Win rate dropped by 5% in the last month. Primary cause: Stalled negotiations.
-                        </p>
-                    </Card>
-
-                    <Card className="absolute bottom-40 right-40 w-56 p-4 shadow-md cursor-move border-l-4 border-l-green-500 bg-background -rotate-2">
-                        <h4 className="font-bold text-sm mb-2">Action Item</h4>
-                        <p className="text-xs text-muted-foreground">
-                            Schedule review with Sales Team for Friday.
-                        </p>
-                    </Card>
+                    )}
                 </div>
             </div>
         </AppLayout>

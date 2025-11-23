@@ -23,7 +23,7 @@ interface PipelineDrilldownProps {
     onClose: () => void;
 }
 
-export function PipelineDrilldown({ stage, timeframe, deals, onClose }: PipelineDrilldownProps) {
+export function PipelineDrilldown({ stage, timeframe, deals = [], onClose }: PipelineDrilldownProps) {
     return (
         <div className="fixed inset-0 z-50 flex justify-end bg-black/20 backdrop-blur-sm animate-in fade-in duration-200">
             <div className="w-full max-w-2xl bg-background h-full shadow-2xl border-l border-border flex flex-col animate-in slide-in-from-right duration-300">

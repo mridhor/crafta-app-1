@@ -37,7 +37,7 @@ export function RoutingRules() {
                             <div className="flex items-center gap-3 text-sm bg-muted/30 p-3 rounded-md">
                                 <div className="flex items-center gap-2">
                                     <span className="font-mono text-xs bg-background border px-1.5 py-0.5 rounded">company.size</span>
-                                    <span className="text-muted-foreground">></span>
+                                    <span className="text-muted-foreground">{'>'}</span>
                                     <span className="font-bold">1000</span>
                                 </div>
                                 <span className="text-xs font-bold text-muted-foreground uppercase">AND</span>
