@@ -35,42 +35,28 @@ export function PipelineView() {
     useEffect(() => {
         const fetchPipeline = async () => {
             setLoading(true);
-
-            // TODO: Get workspace_id from auth context
-            const tempWorkspaceId = 'temp-workspace-id';
-
             const { data: deals, error } = await supabase
                 .from('deals')
-                .select(`
-                    *,
-                    company:companies(id, name, domain, industry)
-                `)
-                .eq('workspace_id', tempWorkspaceId);
-
-            if (error) {
-                console.error('Error fetching deals:', error);
-                setLoading(false);
-                return;
-            }
+                .select('*');
 
             if (deals && deals.length > 0) {
                 setAllDeals(deals);
-
                 // Aggregate deals into heatmap buckets
                 const stages = ["Discovery", "Proposal", "Negotiation", "Closing"];
-                const now = new Date();
-                const getAge = (d: typeof deals[0]) => Math.floor((now.getTime() - new Date(d.created_at).getTime()) / (1000 * 60 * 60 * 24));
-
                 const newHeatmap = stages.map(stage => {
-                    const stageDeals = deals.filter(d => d.stage === stage);
-                    const totalValue = stageDeals.reduce((sum, d) => sum + (Number(d.value) || 0), 0);
+                    const stageDeals = deals.filter((d: any) => d.stage === stage);
+                    const totalValue = stageDeals.reduce((sum: number, d: any) => sum + (Number(d.value) || 0), 0);
+
+                    // Calculate age buckets (mock logic for created_at diff)
+                    const now = new Date();
+                    const getAge = (d: any) => Math.floor((now.getTime() - new Date(d.created_at).getTime()) / (1000 * 60 * 60 * 24));
 
                     return {
                         stage,
-                        days0_3: stageDeals.filter(d => getAge(d) <= 3).length,
-                        days4_7: stageDeals.filter(d => getAge(d) > 3 && getAge(d) <= 7).length,
-                        days8_14: stageDeals.filter(d => getAge(d) > 7 && getAge(d) <= 14).length,
-                        days15plus: stageDeals.filter(d => getAge(d) > 14).length,
+                        days0_3: stageDeals.filter((d: any) => getAge(d) <= 3).length,
+                        days4_7: stageDeals.filter((d: any) => getAge(d) > 3 && getAge(d) <= 7).length,
+                        days8_14: stageDeals.filter((d: any) => getAge(d) > 7 && getAge(d) <= 14).length,
+                        days15plus: stageDeals.filter((d: any) => getAge(d) > 14).length,
                         value: `$${(totalValue / 1000).toFixed(0)}k`
                     };
                 });
