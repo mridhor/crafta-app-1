@@ -208,12 +208,15 @@ export function PipelineView() {
             </div>
 
             {/* Drilldown Modal */}
-            <PipelineDrilldown
-                isOpen={!!selectedCell}
-                onClose={() => setSelectedCell(null)}
-                stage={selectedCell?.stage || ""}
-                ageRange={selectedCell?.ageRange || ""}
-            />
+            {selectedCell && (
+                <PipelineDrilldown
+                    stage={selectedCell.stage}
+                    timeframe={selectedCell.ageRange}
+                    deals={getFilteredDeals() as any}
+                    onClose={() => setSelectedCell(null)}
+                />
+            )}
         </AppLayout>
     );
 }
+```
