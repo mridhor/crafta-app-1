@@ -1,47 +1,27 @@
-import { cn } from "@/lib/utils";
 import { Sparkles } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 
-interface RightPanelProps {
-    className?: string;
-    isOpen?: boolean;
-    children?: React.ReactNode;
-}
-
-export function RightPanel({ className, isOpen = true, children }: RightPanelProps) {
-    if (!isOpen) return null;
-
+export function RightPanel() {
     return (
-        <aside
-            className={cn(
-                "w-80 border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 flex flex-col h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto",
-                className
-            )}
-        >
-            <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
-                <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
-                    <Sparkles className="w-4 h-4" />
-                    <span className="font-medium text-sm">AI Context</span>
-                </div>
-                {/* Toggle button could go here */}
+        <aside className="w-80 border-l border-border bg-background flex flex-col h-[calc(100vh-4rem)] sticky top-16 overflow-y-auto p-4 space-y-4 hidden xl:block">
+            <div className="flex items-center gap-2 text-primary font-medium text-sm mb-2">
+                <Sparkles className="w-4 h-4" />
+                <span>AI Context</span>
             </div>
-            <div className="p-4 space-y-4">
-                {children || (
-                    <>
-                        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800">
-                            <h4 className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">Insight</h4>
-                            <p className="text-xs text-blue-700 dark:text-blue-300">
-                                Reviewing your rhythm stack...
-                            </p>
-                        </div>
 
-                        {/* Placeholders */}
-                        <div className="space-y-2">
-                            <div className="h-20 bg-gray-100 dark:bg-gray-900 rounded-lg" />
-                            <div className="h-20 bg-gray-100 dark:bg-gray-900 rounded-lg" />
-                        </div>
-                    </>
-                )}
-            </div>
+            <Card className="bg-blue-50/50 dark:bg-blue-950/20 border-blue-100 dark:border-blue-900">
+                <CardHeader className="pb-2">
+                    <CardTitle className="text-sm font-medium text-blue-700 dark:text-blue-300">Insight</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-xs text-blue-600 dark:text-blue-400">
+                        Reviewing your rhythm stack...
+                    </p>
+                </CardContent>
+            </Card>
+
+            <div className="h-32 rounded-xl bg-muted/50 animate-pulse" />
+            <div className="h-32 rounded-xl bg-muted/50 animate-pulse" />
         </aside>
     );
 }
