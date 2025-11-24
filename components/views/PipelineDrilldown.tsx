@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { X, ArrowRight, AlertTriangle, MoreHorizontal, User } from "lucide-react";
+import { X, ArrowRight, AlertTriangle, MoreHorizontal, User, Clock, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Deal {
@@ -12,6 +12,7 @@ interface Deal {
     value: string;
     owner: string;
     timeInStage: string;
+    lastInteraction: string;
     decayRisk: "high" | "medium" | "low";
     probability: number;
 }
@@ -60,9 +61,13 @@ export function PipelineDrilldown({ stage, timeframe, deals = [], onClose }: Pip
 
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4 text-sm">
-                                    <div className="flex items-center gap-1.5 text-muted-foreground">
+                                    <div className="flex items-center gap-1.5 text-muted-foreground" title="Owner">
                                         <User className="w-3.5 h-3.5" />
                                         {deal.owner}
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-muted-foreground" title="Last Interaction">
+                                        <Clock className="w-3.5 h-3.5" />
+                                        {deal.lastInteraction}
                                     </div>
                                     <div className={cn(
                                         "flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium",
@@ -77,10 +82,10 @@ export function PipelineDrilldown({ stage, timeframe, deals = [], onClose }: Pip
 
                                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <Button variant="ghost" size="sm" className="h-7 text-xs">
-                                        View
+                                        View Details
                                     </Button>
                                     <Button size="sm" className="h-7 text-xs bg-blue-600 text-white hover:bg-blue-700">
-                                        Action <ArrowRight className="w-3 h-3 ml-1" />
+                                        Nudge Owner <ArrowRight className="w-3 h-3 ml-1" />
                                     </Button>
                                 </div>
                             </div>

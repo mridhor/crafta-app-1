@@ -5,6 +5,7 @@ import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { supabase } from "@/lib/supabase";
+import { EventDrawer } from "@/components/views/EventDrawer";
 import {
     ChevronLeft,
     ChevronRight,
@@ -13,7 +14,10 @@ import {
     MoreHorizontal,
     Plus,
     AlertCircle,
-    Sparkles
+    Sparkles,
+    LayoutGrid,
+    List,
+    Columns
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +33,8 @@ export function CalendarView() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [events, setEvents] = useState<any[]>(initialEvents);
     const [loading, setLoading] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState<any>(null);
+    const [viewMode, setViewMode] = useState("day"); // day, week, month
 
     // Fetch actions from Supabase and map to events
     useEffect(() => {
@@ -87,6 +93,36 @@ export function CalendarView() {
             </div>
 
             <div>
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Views</h3>
+                <div className="space-y-1">
+                    <Button
+                        variant="ghost"
+                        className={cn("w-full justify-start text-sm", viewMode === "day" && "bg-secondary font-medium")}
+                        onClick={() => setViewMode("day")}
+                    >
+                        <Columns className="w-4 h-4 mr-3" />
+                        Day View
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        className={cn("w-full justify-start text-sm", viewMode === "week" && "bg-secondary font-medium")}
+                        onClick={() => setViewMode("week")}
+                    >
+                        <LayoutGrid className="w-4 h-4 mr-3" />
+                        Week View
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        className={cn("w-full justify-start text-sm", viewMode === "month" && "bg-secondary font-medium")}
+                        onClick={() => setViewMode("month")}
+                    >
+                        <CalendarIcon className="w-4 h-4 mr-3" />
+                        Month View
+                    </Button>
+                </div>
+            </div>
+
+            <div>
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Calendars</h3>
                 <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
@@ -108,7 +144,7 @@ export function CalendarView() {
 
     return (
         <AppLayout leftSidebar={sidebar}>
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full relative">
                 {/* Header */}
                 <div className="p-6 border-b border-border flex items-center justify-between bg-background z-10">
                     <div className="flex items-center gap-4">
@@ -150,8 +186,9 @@ export function CalendarView() {
                                     {events.filter(e => e.time === time).map(event => (
                                         <div
                                             key={event.id}
+                                            onClick={() => setSelectedEvent(event)}
                                             className={cn(
-                                                "absolute top-2 left-2 right-4 p-3 rounded-md border text-sm shadow-sm cursor-pointer hover:shadow-md transition-all",
+                                                "absolute top-2 left-2 right-4 p-3 rounded-md border text-sm shadow-sm cursor-pointer hover:shadow-md transition-all group/event",
                                                 event.type === 'meeting' ? "bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-100" :
                                                     event.type === 'internal' ? "bg-gray-50 border-gray-200 text-gray-900 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100" :
                                                         event.type === 'focus' ? "bg-purple-50 border-purple-200 text-purple-900 dark:bg-purple-900/20 dark:border-purple-800 dark:text-purple-100" :
@@ -170,6 +207,15 @@ export function CalendarView() {
                                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {event.duration}</span>
                                             </div>
 
+                                            {/* Hover Tooltip/Actions */}
+                                            <div className="absolute top-full left-0 mt-2 w-64 bg-popover text-popover-foreground p-3 rounded-md shadow-lg border border-border z-50 hidden group-hover/event:block animate-in fade-in zoom-in-95 duration-100">
+                                                <p className="font-semibold text-sm mb-1">{event.title}</p>
+                                                <p className="text-xs text-muted-foreground mb-2">
+                                                    {event.time} • {event.duration}
+                                                </p>
+                                                <p className="text-xs">Click to view details and AI insights.</p>
+                                            </div>
+
                                             {event.aiSuggested && (
                                                 <div className="absolute bottom-2 right-2 flex gap-1">
                                                     <Button size="icon" className="h-5 w-5 bg-green-600 hover:bg-green-700 text-white rounded-full">
@@ -184,6 +230,14 @@ export function CalendarView() {
                         ))}
                     </div>
                 </div>
+
+                {/* Event Drawer */}
+                {selectedEvent && (
+                    <EventDrawer
+                        event={selectedEvent}
+                        onClose={() => setSelectedEvent(null)}
+                    />
+                )}
             </div>
         </AppLayout>
     );

@@ -15,11 +15,11 @@ import {
     Phone,
     Mail,
     MessageSquare,
-    ArrowRight,
     Sparkles,
     Calendar as CalendarIcon,
     User,
-    Users
+    Users,
+    ArrowRight
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -280,11 +280,11 @@ export function RhythmStackView() {
                                     {/* Header */}
                                     <div className="flex justify-between items-start">
                                         <div>
-                                            <h3 className="font-semibold text-lg leading-none mb-1">{task.title}</h3>
+                                            <h3 className="font-semibold text-lg leading-none mb-1 cursor-pointer hover:text-blue-600 transition-colors">{task.title}</h3>
                                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                <span className="font-medium text-foreground">{task.entity}</span>
+                                                <span className="font-medium text-foreground cursor-pointer hover:underline">{task.entity}</span>
                                                 <span>•</span>
-                                                <span>{task.contact}</span>
+                                                <span className="cursor-pointer hover:underline">{task.contact}</span>
                                                 <span>•</span>
                                                 <span className="px-1.5 py-0.5 bg-secondary rounded text-xs font-medium">{task.value}</span>
                                             </div>
@@ -300,14 +300,22 @@ export function RhythmStackView() {
                                         </div>
                                     </div>
 
-                                    {/* AI Context Box */}
-                                    <div className="bg-muted/30 p-3 rounded-md border border-border/50">
+                                    {/* AI Suggestion Bar */}
+                                    <div className="bg-muted/30 p-3 rounded-md border border-border/50 flex items-center justify-between group-hover:bg-blue-50/50 dark:group-hover:bg-blue-900/10 transition-colors">
                                         <div className="flex gap-2 items-start">
                                             <Sparkles className="w-3.5 h-3.5 text-blue-500 mt-0.5 flex-shrink-0" />
-                                            <p className="text-sm text-muted-foreground leading-snug">
-                                                {task.aiContext}
-                                            </p>
+                                            <div>
+                                                <p className="text-sm font-medium text-foreground leading-snug">
+                                                    AI: {task.suggestedAction}
+                                                </p>
+                                                <p className="text-xs text-muted-foreground mt-0.5">
+                                                    {task.aiContext}
+                                                </p>
+                                            </div>
                                         </div>
+                                        <Button size="sm" variant="ghost" className="h-7 text-blue-600 hover:text-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/30">
+                                            Review <ArrowRight className="w-3 h-3 ml-1" />
+                                        </Button>
                                     </div>
 
                                     {/* Actions */}
@@ -318,7 +326,7 @@ export function RhythmStackView() {
                                                 {task.type === 'email' && <Mail className="w-3.5 h-3.5 mr-2" />}
                                                 {task.type === 'meeting' && <CalendarIcon className="w-3.5 h-3.5 mr-2" />}
                                                 {task.type === 'escalate' && <AlertTriangle className="w-3.5 h-3.5 mr-2" />}
-                                                {task.suggestedAction}
+                                                {task.type === 'call' ? 'Call' : task.type === 'email' ? 'Email' : 'Action'}
                                             </Button>
                                             <Button variant="ghost" size="sm" className="h-8 text-muted-foreground hover:text-foreground">
                                                 <MessageSquare className="w-3.5 h-3.5 mr-2" />
