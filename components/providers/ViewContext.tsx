@@ -5,6 +5,8 @@ import { createContext, useContext } from "react";
 interface ViewContextType {
     activeView: string;
     setActiveView: (view: string) => void;
+    viewParams: any;
+    setViewParams: (params: any) => void;
 }
 
 export const ViewContext = createContext<ViewContextType | null>(null);
