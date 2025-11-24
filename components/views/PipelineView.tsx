@@ -14,7 +14,9 @@ import {
     Filter,
     ArrowRight,
     DollarSign,
-    Layers
+    Layers,
+    Calendar,
+    MoreHorizontal
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -103,110 +105,121 @@ export function PipelineView() {
 
     return (
         <AppLayout leftSidebar={<PipelineHealthSidebar />}>
-            <div className="p-6 max-w-5xl mx-auto space-y-6">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-2xl font-bold tracking-tight">Pipeline Overview</h1>
-                        <p className="text-muted-foreground">Temporal heatmap of deal velocity and stagnation.</p>
-                    </div>
-                    <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
-                            <Filter className="w-4 h-4 mr-2" />
-                            Filter
-                        </Button>
-                        <Button>
-                            <Layers className="w-4 h-4 mr-2" />
-                            Forecast View
-                        </Button>
-                    </div>
-                </div>
-
-                {/* Heatmap Card */}
-                <Card className="p-6">
-                    <div className="grid grid-cols-6 gap-4 mb-4 text-sm font-medium text-muted-foreground border-b border-border pb-2">
-                        <div className="col-span-2">Stage</div>
-                        <div className="text-center">0-3 Days</div>
-                        <div className="text-center">4-7 Days</div>
-                        <div className="text-center">8-14 Days</div>
-                        <div className="text-center">15+ Days</div>
+            <div className="min-h-screen bg-slate-50/50 p-6">
+                <div className="max-w-6xl mx-auto space-y-8">
+                    {/* Header */}
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-3xl font-bold tracking-tight text-slate-900">Pipeline Overview</h1>
+                            <p className="text-slate-500 mt-1 text-lg">Temporal heatmap of deal velocity and stagnation.</p>
+                        </div>
+                        <div className="flex gap-3">
+                            <Button variant="outline" size="sm" className="h-9 rounded-lg border-slate-200 text-slate-600 hover:bg-white hover:text-slate-900 shadow-sm">
+                                <Filter className="w-4 h-4 mr-2" />
+                                Filter
+                            </Button>
+                            <Button className="h-9 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm shadow-indigo-200">
+                                <Layers className="w-4 h-4 mr-2" />
+                                Forecast View
+                            </Button>
+                        </div>
                     </div>
 
-                    <div className="space-y-2">
-                        {loading ? (
-                            <div className="text-center py-12 text-muted-foreground">Loading pipeline...</div>
-                        ) : heatmapData.map((row) => (
-                            <div key={row.stage} className="grid grid-cols-6 gap-4 items-center py-3 hover:bg-muted/30 rounded-md transition-colors px-2">
-                                <div className="col-span-2">
-                                    <div className="font-semibold">{row.stage}</div>
-                                    <div className="text-xs text-muted-foreground flex items-center gap-1">
-                                        <DollarSign className="w-3 h-3" />
-                                        {row.value}
+                    {/* Heatmap Card */}
+                    <Card className="p-8 rounded-2xl shadow-sm border-slate-100 bg-white">
+                        <div className="grid grid-cols-6 gap-6 mb-6 text-sm font-medium text-slate-400 border-b border-slate-100 pb-4">
+                            <div className="col-span-2 pl-2">Stage</div>
+                            <div className="text-center">0-3 Days</div>
+                            <div className="text-center">4-7 Days</div>
+                            <div className="text-center">8-14 Days</div>
+                            <div className="text-center">15+ Days</div>
+                        </div>
+
+                        <div className="space-y-3">
+                            {loading ? (
+                                <div className="text-center py-12 text-slate-400">Loading pipeline...</div>
+                            ) : heatmapData.map((row) => (
+                                <div key={row.stage} className="grid grid-cols-6 gap-6 items-center py-4 hover:bg-slate-50/80 rounded-xl transition-all duration-200 px-2 group">
+                                    <div className="col-span-2">
+                                        <div className="font-semibold text-slate-800 text-lg">{row.stage}</div>
+                                        <div className="text-sm text-slate-500 flex items-center gap-1 mt-1">
+                                            <DollarSign className="w-3.5 h-3.5" />
+                                            {row.value}
+                                        </div>
+                                    </div>
+
+                                    {/* Heatmap Cells */}
+                                    <div
+                                        className={cn(
+                                            "h-12 rounded-xl flex items-center justify-center font-semibold cursor-pointer transition-all duration-200 relative overflow-hidden",
+                                            row.days0_3 === 0
+                                                ? "bg-slate-50 text-slate-300"
+                                                : "bg-indigo-50 text-indigo-600 hover:bg-indigo-100 hover:shadow-sm hover:-translate-y-0.5",
+                                            row.days0_3 > 5 && "bg-indigo-100 text-indigo-700 shadow-sm shadow-indigo-100"
+                                        )}
+                                        title={`${row.days0_3} deals in ${row.stage} (0-3 days)`}
+                                        onClick={() => handleCellClick(row.stage, "0-3 Days", row.days0_3)}
+                                    >
+                                        {row.days0_3 || "-"}
+                                    </div>
+
+                                    <div
+                                        className={cn(
+                                            "h-12 rounded-xl flex items-center justify-center font-semibold cursor-pointer transition-all duration-200 relative overflow-hidden",
+                                            row.days4_7 === 0
+                                                ? "bg-slate-50 text-slate-300"
+                                                : "bg-violet-50 text-violet-600 hover:bg-violet-100 hover:shadow-sm hover:-translate-y-0.5",
+                                            row.days4_7 > 3 && "bg-violet-100 text-violet-700 shadow-sm shadow-violet-100"
+                                        )}
+                                        title={`${row.days4_7} deals in ${row.stage} (4-7 days)`}
+                                        onClick={() => handleCellClick(row.stage, "4-7 Days", row.days4_7)}
+                                    >
+                                        {row.days4_7 || "-"}
+                                    </div>
+
+                                    <div
+                                        className={cn(
+                                            "h-12 rounded-xl flex items-center justify-center font-semibold cursor-pointer transition-all duration-200 relative overflow-hidden",
+                                            row.days8_14 === 0
+                                                ? "bg-slate-50 text-slate-300"
+                                                : "bg-amber-50 text-amber-600 hover:bg-amber-100 hover:shadow-sm hover:-translate-y-0.5",
+                                            row.days8_14 > 2 && "bg-amber-100 text-amber-700 shadow-sm shadow-amber-100"
+                                        )}
+                                        title={`${row.days8_14} deals in ${row.stage} (8-14 days)`}
+                                        onClick={() => handleCellClick(row.stage, "8-14 Days", row.days8_14)}
+                                    >
+                                        {row.days8_14 || "-"}
+                                    </div>
+
+                                    <div
+                                        className={cn(
+                                            "h-12 rounded-xl flex items-center justify-center font-semibold cursor-pointer transition-all duration-200 relative overflow-hidden",
+                                            row.days15plus === 0
+                                                ? "bg-slate-50 text-slate-300"
+                                                : "bg-rose-50 text-rose-600 hover:bg-rose-100 hover:shadow-sm hover:-translate-y-0.5",
+                                            row.days15plus > 0 && "bg-rose-100 text-rose-700 shadow-sm shadow-rose-100"
+                                        )}
+                                        title={`${row.days15plus} deals in ${row.stage} (15+ days)`}
+                                        onClick={() => handleCellClick(row.stage, "15+ Days", row.days15plus)}
+                                    >
+                                        {row.days15plus || "-"}
                                     </div>
                                 </div>
+                            ))}
+                        </div>
+                    </Card>
+                </div>
 
-                                {/* Heatmap Cells */}
-                                <div
-                                    className={cn(
-                                        "h-10 rounded-md flex items-center justify-center font-medium cursor-pointer transition-all hover:ring-2 hover:ring-ring hover:ring-offset-1",
-                                        row.days0_3 === 0 ? "bg-muted/20 text-muted-foreground" : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
-                                        row.days0_3 > 5 && "bg-blue-200 text-blue-800 dark:bg-blue-800/50"
-                                    )}
-                                    title={`${row.days0_3} deals in ${row.stage} (0-3 days)`}
-                                    onClick={() => handleCellClick(row.stage, "0-3 Days", row.days0_3)}
-                                >
-                                    {row.days0_3 || "-"}
-                                </div>
-
-                                <div
-                                    className={cn(
-                                        "h-10 rounded-md flex items-center justify-center font-medium cursor-pointer transition-all hover:ring-2 hover:ring-ring hover:ring-offset-1",
-                                        row.days4_7 === 0 ? "bg-muted/20 text-muted-foreground" : "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300",
-                                        row.days4_7 > 3 && "bg-green-200 text-green-800 dark:bg-green-800/50"
-                                    )}
-                                    title={`${row.days4_7} deals in ${row.stage} (4-7 days)`}
-                                    onClick={() => handleCellClick(row.stage, "4-7 Days", row.days4_7)}
-                                >
-                                    {row.days4_7 || "-"}
-                                </div>
-
-                                <div
-                                    className={cn(
-                                        "h-10 rounded-md flex items-center justify-center font-medium cursor-pointer transition-all hover:ring-2 hover:ring-ring hover:ring-offset-1",
-                                        row.days8_14 === 0 ? "bg-muted/20 text-muted-foreground" : "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300",
-                                        row.days8_14 > 2 && "bg-orange-200 text-orange-800 dark:bg-orange-800/50"
-                                    )}
-                                    title={`${row.days8_14} deals in ${row.stage} (8-14 days)`}
-                                    onClick={() => handleCellClick(row.stage, "8-14 Days", row.days8_14)}
-                                >
-                                    {row.days8_14 || "-"}
-                                </div>
-
-                                <div
-                                    className={cn(
-                                        "h-10 rounded-md flex items-center justify-center font-medium cursor-pointer transition-all hover:ring-2 hover:ring-ring hover:ring-offset-1",
-                                        row.days15plus === 0 ? "bg-muted/20 text-muted-foreground" : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
-                                        row.days15plus > 0 && "bg-red-200 text-red-800 dark:bg-red-800/50"
-                                    )}
-                                    title={`${row.days15plus} deals in ${row.stage} (15+ days)`}
-                                    onClick={() => handleCellClick(row.stage, "15+ Days", row.days15plus)}
-                                >
-                                    {row.days15plus || "-"}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </Card>
+                {/* Drilldown Modal */}
+                {selectedCell && (
+                    <PipelineDrilldown
+                        stage={selectedCell.stage}
+                        timeframe={selectedCell.ageRange}
+                        deals={getFilteredDeals()}
+                        onClose={() => setSelectedCell(null)}
+                    />
+                )}
             </div>
-
-            {/* Drilldown Modal */}
-            {selectedCell && (
-                <PipelineDrilldown
-                    stage={selectedCell.stage}
-                    timeframe={selectedCell.ageRange}
-                    deals={getFilteredDeals()}
-                    onClose={() => setSelectedCell(null)}
-                />
-            )}
         </AppLayout>
     );
 }
