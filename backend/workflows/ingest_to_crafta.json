@@ -1,0 +1,164 @@
+{
+    "name": "Ingest to Crafta (Governor Pipeline)",
+    "nodes": [
+        {
+            "parameters": {
+                "path": "ingest-webhook",
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "name": "Webhook Ingest",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Idempotency Check\n// Generate a hash of the payload to use as a key\nconst crypto = require('crypto');\nconst payload = items[0].json;\nconst hash = crypto.createHash('sha256').update(JSON.stringify(payload)).digest('hex');\n\n// In a real scenario, check Redis/DB if this hash exists\n// For now, we pass it along\nitems[0].json._idempotencyKey = hash;\nreturn items;"
+            },
+            "name": "Idempotency Check",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                300,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Enrichment Step\n// Mocking enrichment from Clearbit/ZoomInfo\nconst item = items[0].json;\n\nif (!item.company_size && item.email.includes('acme.com')) {\n  item.company_size = '1000-5000';\n  item._enrichment_source = 'MockEnricher';\n  item._enrichment_confidence = 0.95;\n}\n\nreturn items;"
+            },
+            "name": "Enrichment",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                500,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Governance Rules Engine\nconst item = items[0].json;\nconst logs = [];\nlet blocked = false;\n\n// Rule 1: Email Validation\nif (!item.email || !item.email.includes('@')) {\n  logs.push({ rule: 'RULE-001', decision: 'BLOCKED', rationale: 'Invalid Email' });\n  blocked = true;\n}\n\n// Rule 2: Competitor Check\nif (item.email.includes('competitor.com')) {\n  logs.push({ rule: 'RULE-002', decision: 'QUARANTINED', rationale: 'Competitor Domain' });\n  blocked = true;\n}\n\nitem._governance_logs = logs;\nitem._blocked = blocked;\n\nreturn items;"
+            },
+            "name": "Governance Engine",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                700,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{$node[\"Governance Engine\"].json[\"_blocked\"]}}",
+                            "value2": true
+                        }
+                    ]
+                }
+            },
+            "name": "Is Blocked?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                900,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "table": "lead_logs",
+                "columns": "entity_id, rule_id, decision, rationale, payload",
+                "options": {}
+            },
+            "name": "Log to Audit DB",
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 1,
+            "position": [
+                1100,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Actuator (Writeback)\n// Mock writing to CRM\nconst item = items[0].json;\n\n// In Shadow Mode, we might just log the 'suggested' action\n// Here we simulate a write\n\nreturn [{ json: { status: 'success', written_id: 'crm_123', ...item } }];"
+            },
+            "name": "Actuator (CRM Write)",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                1100,
+                400
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook Ingest": {
+            "main": [
+                [
+                    {
+                        "node": "Idempotency Check",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Idempotency Check": {
+            "main": [
+                [
+                    {
+                        "node": "Enrichment",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Enrichment": {
+            "main": [
+                [
+                    {
+                        "node": "Governance Engine",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Governance Engine": {
+            "main": [
+                [
+                    {
+                        "node": "Is Blocked?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Is Blocked?": {
+            "main": [
+                [
+                    {
+                        "node": "Log to Audit DB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Actuator (CRM Write)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

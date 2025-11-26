@@ -1,0 +1,29 @@
+[2025-11-25T14:00:01Z] [RULE-001] [Entity: Lead: john.doe@acme.com] [DECISION: BLOCKED]
+Rationale: Duplicate entity detected. Matched existing Contact ID: 9823. Action blocked to preserve data integrity.
+
+[2025-11-25T14:00:05Z] [RULE-002] [Entity: Lead: sarah@startup.io] [DECISION: ENRICHED]
+Rationale: Missing 'Company Size'. Enriched via Clearbit (Confidence: 98%). Field updated.
+
+[2025-11-25T14:00:12Z] [RULE-003] [Entity: Deal: Enterprise Expansion] [DECISION: FLAGGED]
+Rationale: Stage moved to 'Negotiation' without 'Decision Maker' contact role. Governance flag raised.
+
+[2025-11-25T14:01:00Z] [RULE-004] [Entity: Lead: unknown@gmail.com] [DECISION: QUARANTINED]
+Rationale: Email domain 'gmail.com' is generic. Personal email addresses are restricted for Enterprise segment. Moved to Quarantine queue.
+
+[2025-11-25T14:02:30Z] [RULE-005] [Entity: Task: Follow-up] [DECISION: ESCALATED]
+Rationale: SLA Breach. Task overdue by 4 hours. Escalated to Manager (Role: RevOps).
+
+[2025-11-25T14:05:00Z] [RULE-001] [Entity: Lead: new.user@bigcorp.com] [DECISION: APPROVED]
+Rationale: Validation passed. No duplicates found. Domain verified. Writing to CRM.
+
+[2025-11-25T14:06:15Z] [SYS-WARN] [API: HubSpot] [STATUS: RATE_LIMIT]
+Rationale: API usage at 85% capacity. Throttling write requests for 60 seconds to prevent lockout.
+
+[2025-11-25T14:07:00Z] [RULE-006] [Entity: Opportunity: Q4 Renewal] [DECISION: AUTO-CORRECTED]
+Rationale: 'Close Date' was in the past. Automatically adjusted to current quarter end (2025-12-31) per policy.
+
+[2025-11-25T14:08:22Z] [RULE-007] [Entity: Contact: mike@vendor.net] [DECISION: SHADOW_MODE]
+Rationale: [SHADOW] Would have routed to 'West Territory'. Current Owner: 'Unassigned'. No action taken.
+
+[2025-11-25T14:10:00Z] [SYS-INFO] [Queue: Writeback] [STATUS: PROCESSED]
+Rationale: Batch write successful. 15 records synced to CRM. Idempotency keys verified.

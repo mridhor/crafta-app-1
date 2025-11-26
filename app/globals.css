@@ -3,32 +3,32 @@
 :root {
   --background: #f8f9fa;
   --foreground: #1a1a1a;
-  
+
   --card: #ffffff;
   --card-foreground: #1a1a1a;
-  
+
   --popover: #ffffff;
   --popover-foreground: #1a1a1a;
-  
+
   --primary: #6366f1;
   --primary-foreground: #ffffff;
-  
+
   --secondary: #f1f5f9;
   --secondary-foreground: #0f172a;
-  
+
   --muted: #f1f5f9;
   --muted-foreground: #64748b;
-  
+
   --accent: #f1f5f9;
   --accent-foreground: #0f172a;
-  
+
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  
+
   --border: #e2e8f0;
   --input: #e2e8f0;
   --ring: #6366f1;
-  
+
   --radius: 0.5rem;
 }
 
@@ -57,6 +57,8 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Dark mode removed to enforce Governor Light Mode */
+/* 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -79,7 +81,8 @@
     --input: #262626;
     --ring: #6366f1;
   }
-}
+} 
+*/
 
 body {
   background: var(--background);
