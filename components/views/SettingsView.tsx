@@ -70,11 +70,11 @@ export function SettingsView() {
                             className={cn(
                                 "w-full justify-start text-sm gap-3",
                                 activeTab === tab.id
-                                    ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300 font-medium"
+                                    ? "bg-primary/5 text-primary font-medium"
                                     : "text-muted-foreground hover:text-foreground"
                             )}
                         >
-                            <tab.icon className={cn("w-4 h-4", activeTab === tab.id ? "text-blue-600 dark:text-blue-400" : "")} />
+                            <tab.icon className={cn("w-4 h-4", activeTab === tab.id ? "text-primary" : "")} />
                             {tab.label}
                         </Button>
                     ))}

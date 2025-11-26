@@ -100,7 +100,7 @@ export function CanvasView() {
                     Find Buying Centers
                 </Button>
                 <Button variant="outline" className="w-full justify-start text-sm">
-                    <Network className="w-4 h-4 mr-2 text-purple-500" />
+                    <Network className="w-4 h-4 mr-2 text-muted-foreground" />
                     Map Influence Paths
                 </Button>
             </div>
@@ -152,8 +152,8 @@ export function CanvasView() {
                             key={node.id}
                             className={cn(
                                 "absolute transform -translate-x-1/2 -translate-y-1/2 p-3 rounded-lg border shadow-sm cursor-pointer hover:shadow-md transition-all bg-background flex items-center gap-2 min-w-[150px]",
-                                node.type === 'company' ? "border-blue-200 dark:border-blue-800" :
-                                    node.type === 'contact' ? "border-purple-200 dark:border-purple-800" :
+                                node.type === 'company' ? "border-primary/20" :
+                                    node.type === 'contact' ? "border-border" :
                                         node.type === 'deal' ? "border-green-200 dark:border-green-800" :
                                             "border-gray-200 dark:border-gray-800"
                             )}
@@ -161,8 +161,8 @@ export function CanvasView() {
                         >
                             <div className={cn(
                                 "w-8 h-8 rounded flex items-center justify-center text-white",
-                                node.type === 'company' ? "bg-blue-500" :
-                                    node.type === 'contact' ? "bg-purple-500" :
+                                node.type === 'company' ? "bg-primary" :
+                                    node.type === 'contact' ? "bg-secondary text-foreground border border-border" :
                                         node.type === 'deal' ? "bg-green-500" :
                                             "bg-gray-500"
                             )}>
@@ -181,7 +181,7 @@ export function CanvasView() {
                     {loading && (
                         <div className="absolute inset-0 flex items-center justify-center bg-background/50 backdrop-blur-sm z-20">
                             <div className="flex flex-col items-center gap-2">
-                                <Sparkles className="w-8 h-8 text-blue-500 animate-pulse" />
+                                <Sparkles className="w-8 h-8 text-primary animate-pulse" />
                                 <p className="text-sm font-medium text-muted-foreground">Loading Intelligence Graph...</p>
                             </div>
                         </div>

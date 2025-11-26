@@ -176,7 +176,7 @@ export function ConvertView() {
                                     key={item.id}
                                     className={cn(
                                         "px-6 py-4 flex items-center hover:bg-muted/20 cursor-pointer transition-colors",
-                                        selectedItem?.id === item.id ? "bg-blue-50 dark:bg-blue-900/10" : ""
+                                        selectedItem?.id === item.id ? "bg-primary/5" : ""
                                     )}
                                     onClick={() => setSelectedItem(item)}
                                 >
@@ -227,7 +227,7 @@ export function ConvertView() {
                     <div className="w-[450px] border-l border-border bg-background flex flex-col animate-in slide-in-from-right duration-300 shadow-xl z-20">
                         <div className="p-4 border-b border-border flex justify-between items-center bg-muted/10">
                             <h3 className="font-bold flex items-center gap-2">
-                                <FileJson className="w-4 h-4 text-blue-500" />
+                                <FileJson className="w-4 h-4 text-primary" />
                                 Validation Detail
                             </h3>
                             <Button variant="ghost" size="icon" onClick={() => setSelectedItem(null)}>
@@ -276,18 +276,18 @@ export function ConvertView() {
                             {/* Fix Suggestions */}
                             <div>
                                 <h4 className="text-xs font-bold text-muted-foreground uppercase mb-2">AI Fix Suggestions</h4>
-                                <div className="p-4 border border-blue-100 bg-blue-50/50 rounded-md dark:border-blue-900 dark:bg-blue-900/10">
+                                <div className="p-4 border border-primary/20 bg-primary/5 rounded-md">
                                     <div className="flex items-start gap-3">
-                                        <Wand2 className="w-4 h-4 text-blue-600 mt-1" />
+                                        <Wand2 className="w-4 h-4 text-primary mt-1" />
                                         <div className="flex-1">
-                                            <p className="text-sm font-medium text-blue-900 dark:text-blue-100">Enrich & Standardize</p>
-                                            <ul className="mt-2 space-y-1 text-xs text-blue-800 dark:text-blue-200 list-disc list-inside">
+                                            <p className="text-sm font-medium text-foreground">Enrich & Standardize</p>
+                                            <ul className="mt-2 space-y-1 text-xs text-muted-foreground list-disc list-inside">
                                                 <li>Infer Industry: "Technology"</li>
                                                 <li>Normalize Phone: "+1 (555) 123-4567"</li>
                                             </ul>
                                             <Button
                                                 size="sm"
-                                                className="mt-3 w-full bg-blue-600 hover:bg-blue-700 text-white"
+                                                className="mt-3 w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                                                 onClick={() => handleAutoFix(selectedItem.id)}
                                             >
                                                 Apply Fixes & Approve

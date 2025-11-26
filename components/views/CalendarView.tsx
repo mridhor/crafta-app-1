@@ -126,15 +126,15 @@ export function CalendarView() {
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Calendars</h3>
                 <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-blue-500" />
+                        <div className="w-3 h-3 rounded-full bg-primary" />
                         <span>My Calendar</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-purple-500" />
+                        <div className="w-3 h-3 rounded-full bg-secondary border border-border" />
                         <span>Team Events</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-green-500" />
+                        <div className="w-3 h-3 rounded-full bg-muted border border-border" />
                         <span>Tasks</span>
                     </div>
                 </div>
@@ -189,10 +189,10 @@ export function CalendarView() {
                                             onClick={() => setSelectedEvent(event)}
                                             className={cn(
                                                 "absolute top-2 left-2 right-4 p-3 rounded-md border text-sm shadow-sm cursor-pointer hover:shadow-md transition-all group/event",
-                                                event.type === 'meeting' ? "bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-100" :
-                                                    event.type === 'internal' ? "bg-gray-50 border-gray-200 text-gray-900 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-100" :
-                                                        event.type === 'focus' ? "bg-purple-50 border-purple-200 text-purple-900 dark:bg-purple-900/20 dark:border-purple-800 dark:text-purple-100" :
-                                                            "bg-green-50 border-green-200 text-green-900 dark:bg-green-900/20 dark:border-green-800 dark:text-green-100",
+                                                event.type === 'meeting' ? "bg-primary/5 border-primary/20 text-primary" :
+                                                    event.type === 'internal' ? "bg-secondary border-border text-foreground" :
+                                                        event.type === 'focus' ? "bg-muted border-border text-muted-foreground" :
+                                                            "bg-secondary border-border text-foreground",
                                                 event.conflict && "ring-2 ring-red-500 border-red-500 bg-red-50 dark:bg-red-900/10",
                                                 event.aiSuggested && "border-dashed border-2"
                                             )}
@@ -201,7 +201,7 @@ export function CalendarView() {
                                             <div className="flex justify-between items-start">
                                                 <span className="font-semibold truncate">{event.title}</span>
                                                 {event.conflict && <AlertCircle className="w-4 h-4 text-red-600" />}
-                                                {event.aiSuggested && <Sparkles className="w-3 h-3 text-blue-500" />}
+                                                {event.aiSuggested && <Sparkles className="w-3 h-3 text-primary" />}
                                             </div>
                                             <div className="text-xs opacity-80 mt-1 flex gap-2">
                                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {event.duration}</span>

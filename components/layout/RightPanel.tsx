@@ -9,12 +9,12 @@ export function RightPanel() {
                 <span>AI Context</span>
             </div>
 
-            <Card className="bg-blue-50/50 dark:bg-blue-950/20 border-blue-100 dark:border-blue-900">
+            <Card className="bg-primary/5 border-primary/10">
                 <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-blue-700 dark:text-blue-300">Insight</CardTitle>
+                    <CardTitle className="text-sm font-medium text-primary">Insight</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-xs text-blue-600 dark:text-blue-400">
+                    <p className="text-xs text-muted-foreground">
                         Reviewing your rhythm stack...
                     </p>
                 </CardContent>

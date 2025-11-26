@@ -62,7 +62,7 @@ export function TopBar() {
                     </Button>
 
                     <div className="flex items-center gap-2 px-2 py-1 rounded-md hover:bg-muted cursor-pointer">
-                        <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-[10px] font-bold">
+                        <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-[10px] font-bold">
                             WS
                         </div>
                         <span className="text-sm font-medium hidden sm:block">Workspace</span>

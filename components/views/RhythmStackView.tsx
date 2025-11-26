@@ -191,7 +191,7 @@ export function RhythmStackView() {
                         className={cn("w-full justify-start text-sm", activeView === "team-items" && "bg-secondary font-medium")}
                         onClick={() => setActiveView("team-items")}
                     >
-                        <Users className="w-4 h-4 mr-3 text-purple-500" />
+                        <Users className="w-4 h-4 mr-3 text-muted-foreground" />
                         Team Items
                     </Button>
                 </nav>
@@ -222,7 +222,7 @@ export function RhythmStackView() {
         <div className="h-full flex flex-col">
             <div className="p-4 border-b border-border">
                 <h3 className="font-semibold flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-blue-500" />
+                    <Sparkles className="w-4 h-4 text-primary" />
                     AI Context
                 </h3>
             </div>
@@ -236,8 +236,8 @@ export function RhythmStackView() {
 
                 <div className="space-y-2">
                     <h4 className="text-xs font-bold text-muted-foreground uppercase">Pattern Detection</h4>
-                    <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-md border border-blue-100 dark:border-blue-900">
-                        <p className="text-xs text-blue-800 dark:text-blue-200">
+                    <div className="bg-primary/5 p-3 rounded-md border border-primary/10">
+                        <p className="text-xs text-muted-foreground">
                             <strong>Deal Velocity Alert:</strong> Deals in "Proposal" stage are stalling 20% longer than last month. Consider scheduling follow-ups earlier.
                         </p>
                     </div>
@@ -266,21 +266,21 @@ export function RhythmStackView() {
                     {loading && tasks.length === 0 ? (
                         <div className="text-center py-12 text-muted-foreground">Loading tasks...</div>
                     ) : filteredTasks.map((task) => (
-                        <Card key={task.id} className="p-0 overflow-hidden hover:shadow-md transition-shadow border-l-4 border-l-transparent hover:border-l-blue-500 group">
+                        <Card key={task.id} className="p-0 overflow-hidden hover:shadow-md transition-shadow border-l-4 border-l-transparent hover:border-l-primary group">
                             <div className="p-5 flex gap-4">
                                 {/* Urgency Indicator */}
                                 <div className="mt-1">
                                     {task.urgency === 'critical' && <div className="w-3 h-3 rounded-full bg-red-500 ring-4 ring-red-100 dark:ring-red-900/30" />}
                                     {task.urgency === 'high' && <div className="w-3 h-3 rounded-full bg-orange-500 ring-4 ring-orange-100 dark:ring-orange-900/30" />}
                                     {task.urgency === 'medium' && <div className="w-3 h-3 rounded-full bg-yellow-500" />}
-                                    {task.urgency === 'low' && <div className="w-3 h-3 rounded-full bg-blue-500" />}
+                                    {task.urgency === 'low' && <div className="w-3 h-3 rounded-full bg-primary/50" />}
                                 </div>
 
                                 <div className="flex-1 space-y-3">
                                     {/* Header */}
                                     <div className="flex justify-between items-start">
                                         <div>
-                                            <h3 className="font-semibold text-lg leading-none mb-1 cursor-pointer hover:text-blue-600 transition-colors">{task.title}</h3>
+                                            <h3 className="font-semibold text-lg leading-none mb-1 cursor-pointer hover:text-primary transition-colors">{task.title}</h3>
                                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                                 <span className="font-medium text-foreground cursor-pointer hover:underline">{task.entity}</span>
                                                 <span>•</span>
@@ -301,9 +301,9 @@ export function RhythmStackView() {
                                     </div>
 
                                     {/* AI Suggestion Bar */}
-                                    <div className="bg-muted/30 p-3 rounded-md border border-border/50 flex items-center justify-between group-hover:bg-blue-50/50 dark:group-hover:bg-blue-900/10 transition-colors">
+                                    <div className="bg-muted/30 p-3 rounded-md border border-border/50 flex items-center justify-between group-hover:bg-primary/5 transition-colors">
                                         <div className="flex gap-2 items-start">
-                                            <Sparkles className="w-3.5 h-3.5 text-blue-500 mt-0.5 flex-shrink-0" />
+                                            <Sparkles className="w-3.5 h-3.5 text-primary mt-0.5 flex-shrink-0" />
                                             <div>
                                                 <p className="text-sm font-medium text-foreground leading-snug">
                                                     AI: {task.suggestedAction}
@@ -313,7 +313,7 @@ export function RhythmStackView() {
                                                 </p>
                                             </div>
                                         </div>
-                                        <Button size="sm" variant="ghost" className="h-7 text-blue-600 hover:text-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900/30">
+                                        <Button size="sm" variant="ghost" className="h-7 text-primary hover:text-primary hover:bg-primary/10">
                                             Review <ArrowRight className="w-3 h-3 ml-1" />
                                         </Button>
                                     </div>
@@ -321,7 +321,7 @@ export function RhythmStackView() {
                                     {/* Actions */}
                                     <div className="flex items-center justify-between pt-1">
                                         <div className="flex items-center gap-2">
-                                            <Button size="sm" className="h-8 bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
+                                            <Button size="sm" className="h-8 bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm">
                                                 {task.type === 'call' && <Phone className="w-3.5 h-3.5 mr-2" />}
                                                 {task.type === 'email' && <Mail className="w-3.5 h-3.5 mr-2" />}
                                                 {task.type === 'meeting' && <CalendarIcon className="w-3.5 h-3.5 mr-2" />}
