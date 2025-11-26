@@ -8,7 +8,7 @@ export async function GET(request: Request) {
     const status = searchParams.get("status") || "pending";
 
     let query = supabase
-        .from("intake_queue")
+        .from("intakes")
         .select("*");
 
     if (status) query = query.eq("status", status);
@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     const body = await request.json();
 
     const { data, error } = await supabase
-        .from("intake_queue")
+        .from("intakes")
         .insert(body)
         .select()
         .single();

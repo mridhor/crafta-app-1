@@ -10,7 +10,7 @@ export async function PATCH(
     const body = await request.json();
 
     const { data, error } = await supabase
-        .from("intake_queue")
+        .from("intakes")
         .update(body)
         .eq("id", id)
         .select()
@@ -31,7 +31,7 @@ export async function DELETE(
     const { id } = await params;
 
     const { error } = await supabase
-        .from("intake_queue")
+        .from("intakes")
         .delete()
         .eq("id", id);
 
