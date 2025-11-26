@@ -60,13 +60,15 @@ export function TopBar() {
                         <span className="text-sm font-medium hidden sm:block">Workspace</span>
                     </div>
 
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-muted-foreground"
-                    >
-                        <Settings className="w-5 h-5" />
-                    </Button>
+                    <Link href="/settings">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-muted-foreground"
+                        >
+                            <Settings className="w-5 h-5" />
+                        </Button>
+                    </Link>
 
                     <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center overflow-hidden border border-border">
                         <User className="w-5 h-5 text-muted-foreground" />
