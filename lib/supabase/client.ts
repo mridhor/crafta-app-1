@@ -6,4 +6,3 @@ export function createClient() {
         process.env.SUPABASE_ANON_KEY!
     )
 }
-S

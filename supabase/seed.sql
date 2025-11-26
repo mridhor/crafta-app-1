@@ -29,11 +29,11 @@ ON CONFLICT (id) DO NOTHING;
 -- Create Contacts
 INSERT INTO public.contacts (id, workspace_id, company_id, email, first_name, last_name, title, phone, is_champion, is_economic_buyer)
 VALUES
-    ('p1111111-1111-1111-1111-111111111111', 'b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', 'c1111111-1111-1111-1111-111111111111', 'sarah@technova.io', 'Sarah', 'Jenkins', 'CTO', '+1-555-0101', true, true),
-    ('p2222222-2222-2222-2222-222222222222', 'b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', 'c1111111-1111-1111-1111-111111111111', 'mike@technova.io', 'Mike', 'Ross', 'VP Engineering', '+1-555-0102', false, false),
-    ('p3333333-3333-3333-3333-333333333333', 'b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', 'c2222222-2222-2222-2222-222222222222', 'david@greenfield.com', 'David', 'Wallace', 'CFO', '+1-555-0103', false, true),
-    ('p4444444-4444-4444-4444-444444444444', 'b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', 'c3333333-3333-3333-3333-333333333333', 'lisa@bluesky.net', 'Lisa', 'Cuddy', 'Operations Director', '+1-555-0104', true, false),
-    ('p5555555-5555-5555-5555-555555555555', 'b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', 'c5555555-5555-5555-5555-555555555555', 'greg@nebulahealth.com', 'Greg', 'House', 'Head of Diagnostics', '+1-555-0105', true, false)
+    ('11111111-1111-1111-1111-111111111111', 'b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', 'c1111111-1111-1111-1111-111111111111', 'sarah@technova.io', 'Sarah', 'Jenkins', 'CTO', '+1-555-0101', true, true),
+    ('22222222-2222-2222-2222-222222222222', 'b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', 'c1111111-1111-1111-1111-111111111111', 'mike@technova.io', 'Mike', 'Ross', 'VP Engineering', '+1-555-0102', false, false),
+    ('33333333-3333-3333-3333-333333333333', 'b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', 'c2222222-2222-2222-2222-222222222222', 'david@greenfield.com', 'David', 'Wallace', 'CFO', '+1-555-0103', false, true),
+    ('44444444-4444-4444-4444-444444444444', 'b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', 'c3333333-3333-3333-3333-333333333333', 'lisa@bluesky.net', 'Lisa', 'Cuddy', 'Operations Director', '+1-555-0104', true, false),
+    ('55555555-5555-5555-5555-555555555555', 'b3e3e3e3-3e3e-3e3e-3e3e-3e3e3e3e3e3e', 'c5555555-5555-5555-5555-555555555555', 'greg@nebulahealth.com', 'Greg', 'House', 'Head of Diagnostics', '+1-555-0105', true, false)
 ON CONFLICT (id) DO NOTHING;
 
 -- Create Deals
