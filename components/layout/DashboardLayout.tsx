@@ -1,15 +1,15 @@
-import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";
+import { RightPanel } from "./RightPanel";
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex min-h-screen bg-background">
-            <Sidebar />
-            <div className="flex-1 flex flex-col min-w-0">
-                <TopBar />
-                <main className="flex-1 p-6 overflow-y-auto">
+        <div className="flex min-h-screen bg-background flex-col">
+            <TopBar />
+            <div className="flex flex-1">
+                <main className="flex-1 p-6">
                     {children}
                 </main>
+                <RightPanel />
             </div>
         </div>
     );
