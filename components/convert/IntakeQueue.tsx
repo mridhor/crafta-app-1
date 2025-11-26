@@ -11,7 +11,7 @@ export function IntakeQueue() {
     const { data: items, isLoading } = useQuery({
         queryKey: ["intake-queue"],
         queryFn: async () => {
-            const res = await fetch("/api/convert?status=pending");
+            const res = await fetch("/api/convert?status=quarantined");
             return res.json();
         }
     });
