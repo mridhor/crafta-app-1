@@ -17,7 +17,7 @@ export function LogicLogItem({ timestamp, ruleId, entity, decision, rationale, o
         BLOCKED: { color: 'text-red-700', bg: 'bg-red-50', icon: ShieldAlert },
         QUARANTINED: { color: 'text-orange-700', bg: 'bg-orange-50', icon: Shield },
         SHADOW_MODE: { color: 'text-gray-600', bg: 'bg-gray-100', icon: Search },
-        ENRICHED: { color: 'text-blue-700', bg: 'bg-blue-50', icon: Shield },
+        ENRICHED: { color: 'text-primary', bg: 'bg-primary/10', icon: Shield },
         FLAGGED: { color: 'text-amber-700', bg: 'bg-amber-50', icon: ShieldAlert },
     };
 

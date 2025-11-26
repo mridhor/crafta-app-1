@@ -85,7 +85,7 @@ export function DealDetails() {
 
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Deal Navigation</h3>
                 <nav className="space-y-1">
-                    <Button variant="ghost" className="w-full justify-start text-sm bg-secondary font-medium text-blue-600">
+                    <Button variant="ghost" className="w-full justify-start text-sm bg-secondary font-medium text-primary">
                         Timeline
                     </Button>
                     <Button variant="ghost" className="w-full justify-start text-sm text-muted-foreground">
@@ -104,7 +104,7 @@ export function DealDetails() {
                 <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">Related Records</h3>
                 <div className="space-y-2">
                     <Card className="p-3 flex items-center gap-3 hover:bg-muted/50 cursor-pointer transition-colors">
-                        <div className="w-8 h-8 rounded bg-purple-100 text-purple-700 flex items-center justify-center text-xs font-bold">
+                        <div className="w-8 h-8 rounded bg-secondary text-foreground flex items-center justify-center text-xs font-bold">
                             AC
                         </div>
                         <div>
@@ -113,7 +113,7 @@ export function DealDetails() {
                         </div>
                     </Card>
                     <Card className="p-3 flex items-center gap-3 hover:bg-muted/50 cursor-pointer transition-colors">
-                        <div className="w-8 h-8 rounded bg-green-100 text-green-700 flex items-center justify-center text-xs font-bold">
+                        <div className="w-8 h-8 rounded bg-secondary text-foreground flex items-center justify-center text-xs font-bold">
                             JD
                         </div>
                         <div>
@@ -148,7 +148,7 @@ export function DealDetails() {
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline">Edit</Button>
-                        <Button className="bg-blue-600 hover:bg-blue-700 text-white">Move Stage</Button>
+                        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">Move Stage</Button>
                     </div>
                 </div>
 
@@ -158,15 +158,15 @@ export function DealDetails() {
                         <div className="w-1/4 bg-green-500" />
                         <div className="w-1/4 bg-green-500" />
                         <div className="w-1/4 bg-green-500" />
-                        <div className="w-1/4 bg-blue-500 relative">
-                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-blue-500 rounded-full shadow-sm" />
+                        <div className="w-1/4 bg-primary relative">
+                            <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-primary rounded-full shadow-sm" />
                         </div>
                     </div>
                     <div className="flex justify-between text-xs text-muted-foreground px-1">
                         <span>Lead</span>
                         <span>Discovery</span>
                         <span>Proposal</span>
-                        <span className="font-medium text-blue-600">Negotiation</span>
+                        <span className="font-medium text-primary">Negotiation</span>
                         <span>Closed</span>
                     </div>
                 </div>

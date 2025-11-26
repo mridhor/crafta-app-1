@@ -62,7 +62,7 @@ export function CompanyDetails() {
                         {company.name.substring(0, 2).toUpperCase()}
                     </div>
                     <h2 className="font-bold text-lg">{company.name}</h2>
-                    <a href={`https://${company.domain}`} target="_blank" rel="noreferrer" className="text-sm text-blue-600 hover:underline flex items-center justify-center gap-1 mt-1">
+                    <a href={`https://${company.domain}`} target="_blank" rel="noreferrer" className="text-sm text-primary hover:underline flex items-center justify-center gap-1 mt-1">
                         <Globe className="w-3 h-3" />
                         {company.domain}
                     </a>
@@ -151,7 +151,7 @@ export function CompanyDetails() {
                                     </div>
                                     <div className="text-right">
                                         <div className="font-medium">$50,000</div>
-                                        <div className="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-700 font-medium inline-block mt-1">Negotiation</div>
+                                        <div className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium inline-block mt-1">Negotiation</div>
                                     </div>
                                 </Card>
                                 <Card className="p-4 flex items-center justify-between hover:bg-muted/30 cursor-pointer transition-colors">

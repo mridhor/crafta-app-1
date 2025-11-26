@@ -48,8 +48,8 @@ export function EntityTimeline({ events, onExplain }: EntityTimelineProps) {
     const getColor = (type: TimelineEvent['type']) => {
         switch (type) {
             case 'stage_change': return "text-green-600 bg-green-100 border-green-200";
-            case 'ai_insight': return "text-purple-600 bg-purple-100 border-purple-200";
-            case 'task': return "text-blue-600 bg-blue-100 border-blue-200";
+            case 'ai_insight': return "text-primary bg-primary/10 border-primary/20";
+            case 'task': return "text-foreground bg-secondary border-border";
             default: return "text-muted-foreground bg-secondary border-border";
         }
     };
@@ -63,7 +63,7 @@ export function EntityTimeline({ events, onExplain }: EntityTimelineProps) {
 
             <div className="space-y-4 relative pl-4 border-l border-border ml-2">
                 {events.map((event) => (
-                    <Card key={event.id} className={cn("p-4 ml-4 relative transition-all hover:shadow-md", event.type === 'ai_insight' && "bg-purple-50/50 border-purple-100")}>
+                    <Card key={event.id} className={cn("p-4 ml-4 relative transition-all hover:shadow-md", event.type === 'ai_insight' && "bg-primary/5 border-primary/10")}>
                         <div className={cn(
                             "absolute -left-[25px] top-4 w-6 h-6 rounded-full border-2 flex items-center justify-center bg-background z-10",
                             getColor(event.type).split(" ")[0].replace("text-", "border-")
@@ -95,7 +95,7 @@ export function EntityTimeline({ events, onExplain }: EntityTimelineProps) {
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="h-6 text-[10px] text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-2"
+                                    className="h-6 text-[10px] text-primary hover:text-primary hover:bg-primary/10 px-2"
                                     onClick={() => onExplain?.(event.id)}
                                 >
                                     <Bot className="w-3 h-3 mr-1.5" />

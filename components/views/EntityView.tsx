@@ -144,7 +144,7 @@ export function EntityView() {
                         className={cn("w-full justify-start text-sm", activeTab === "deals" && "bg-secondary font-medium")}
                         onClick={() => setActiveTab("deals")}
                     >
-                        <DollarSign className="w-4 h-4 mr-3 text-green-600" />
+                        <DollarSign className="w-4 h-4 mr-3 text-muted-foreground" />
                         Deals
                     </Button>
                     <Button
@@ -152,7 +152,7 @@ export function EntityView() {
                         className={cn("w-full justify-start text-sm", activeTab === "companies" && "bg-secondary font-medium")}
                         onClick={() => setActiveTab("companies")}
                     >
-                        <Building2 className="w-4 h-4 mr-3 text-blue-500" />
+                        <Building2 className="w-4 h-4 mr-3 text-muted-foreground" />
                         Companies
                     </Button>
                     <Button
@@ -160,7 +160,7 @@ export function EntityView() {
                         className={cn("w-full justify-start text-sm", activeTab === "contacts" && "bg-secondary font-medium")}
                         onClick={() => setActiveTab("contacts")}
                     >
-                        <Users className="w-4 h-4 mr-3 text-purple-500" />
+                        <Users className="w-4 h-4 mr-3 text-muted-foreground" />
                         Contacts
                     </Button>
                 </nav>
@@ -323,7 +323,7 @@ export function EntityView() {
                                 key={entity.id}
                                 className={cn(
                                     "px-6 py-3 flex items-center hover:bg-muted/30 transition-colors group cursor-pointer text-sm",
-                                    selectedIds.includes(entity.id) && "bg-blue-50/50"
+                                    selectedIds.includes(entity.id) && "bg-primary/5"
                                 )}
                                 onClick={() => {
                                     setViewParams({ id: entity.id, type: activeTab.slice(0, -1) }); // Pass type
@@ -407,7 +407,7 @@ export function EntityView() {
                                         <div className="w-32 text-muted-foreground text-xs">{entity.company}</div>
                                         <div className="w-40 text-muted-foreground text-xs truncate">{entity.email}</div>
                                         <div className="w-24">
-                                            <span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-medium border border-blue-100">
+                                            <span className="px-2 py-0.5 rounded bg-secondary text-foreground text-[10px] font-medium border border-border">
                                                 {entity.status}
                                             </span>
                                         </div>
